@@ -9,6 +9,9 @@ jobs:
   docker:
     runs-on: ubuntu-latest
 
+    env:
+      APP_MESSAGE: ${{ secrets.APP_MESSAGE }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
