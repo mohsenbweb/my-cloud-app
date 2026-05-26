@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build Push and Deploy
 
 on:
   push:
@@ -13,7 +13,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Log in to Azure Container Registry
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to Azure Container Registry
         run: echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ secrets.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
 
       - name: Build Docker Image
@@ -21,3 +26,10 @@ jobs:
 
       - name: Push Docker Image
         run: docker push ${{ secrets.ACR_LOGIN_SERVER }}/my-cloud-app:latest
+
+      - name: Deploy to Azure Container App
+        run: |
+          az containerapp update \
+            --name my-cloud-app \
+            --resource-group my-cloud-rg \
+            --image ${{ secrets.ACR_LOGIN_SERVER }}/my-cloud-app:latest
