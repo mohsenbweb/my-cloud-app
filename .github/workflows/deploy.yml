@@ -32,6 +32,6 @@ jobs:
       - name: Deploy to Azure Container App
         run: |
           az containerapp update \
-            --name DEINE_CONTAINER_APP:mo123 \
-            --resource-group DEINE_RESOURCE_GROUP:ma123 \
+            --name mo123 \
+            --resource-group ma123 \
             --image ${{ secrets.ACR_LOGIN_SERVER }}/my-cloud-app:${{ github.sha }}
