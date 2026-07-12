@@ -4,7 +4,9 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "Version 4 unique image tag!"
+    return "Version 5 real Azure deploy!"
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=5000)
+
+
