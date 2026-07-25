@@ -1,17 +1,26 @@
+import logging
+from config import APP_NAME, VERSION, ENVIRONMENT
 from flask import Flask, jsonify
 from datetime import datetime
 import platform
 import socket
 import os
 
+
 app = Flask(__name__)
 
-APP_NAME = "My Cloud App"
-VERSION = "1.0.0"
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s"
+)
+
+logger = logging.getLogger(__name__)
 
 
 @app.route("/")
 def home():
+    logger.info("Home endpoint called")
+
     return jsonify({
         "application": APP_NAME,
         "message": "Application is running successfully.",
@@ -21,6 +30,8 @@ def home():
 
 @app.route("/health")
 def health():
+    logger.info("Health endpoint called")
+
     return jsonify({
         "status": "Healthy",
         "timestamp": datetime.utcnow().isoformat() + "Z"
@@ -48,13 +59,15 @@ def info():
 
 @app.route("/system")
 def system():
+    logger.info("System endpoint called")
+
     return jsonify({
         "hostname": socket.gethostname(),
         "python_version": platform.python_version(),
         "operating_system": platform.system(),
         "os_release": platform.release(),
         "container_revision": os.getenv("CONTAINER_APP_REVISION", "unknown"),
-        "environment": os.getenv("ENVIRONMENT", "development"),
+        "environment": ENVIRONMENT,
         "utc_time": datetime.utcnow().isoformat() + "Z"
     })
 
